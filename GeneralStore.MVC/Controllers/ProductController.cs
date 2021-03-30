@@ -34,6 +34,29 @@ namespace GeneralStore.MVC.Controllers
         }
 
         //get : Delete
+        //product/Delete/{id}
+        public ActionResult Delete (int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            Product product = _db.products.Find(id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+            return View(product);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            Product product = _db.products.Find(id);
+            _db.products.Remove(product);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
     }
 }
